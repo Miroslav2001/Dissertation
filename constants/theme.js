@@ -4,6 +4,7 @@ export const COLORS = {
   
     white: "#FFF",
     gray: "#74858C",
+    light_purple: "#8140D9",
   };
   
   export const SIZES = {
@@ -13,6 +14,7 @@ export const COLORS = {
     medium: 16,
     large: 18,
     extraLarge: 24,
+    header: 43
   };
   
   export const FONTS = {

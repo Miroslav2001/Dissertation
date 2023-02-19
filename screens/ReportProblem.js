@@ -3,13 +3,12 @@ import { SafeAreaView, View,StyleSheet} from 'react-native';
 import { COLORS, SIZES,} from "../constants";
 import {  ToHomeButton, OptionMenu, ReportButton } from '../components';
 
-const Details = () => {
+const ReportProblem = () => {
   return (
     <SafeAreaView style={{ flex: 1}}>
        
         <View style={{ flex: 1, backgroundColor:COLORS.gray}} >
           <View style={styles.menuBar}>
-          <ReportButton/>
           </View>
           <ToHomeButton
             minWidth={110}
@@ -21,7 +20,7 @@ const Details = () => {
   )
 }
 
-export default Details
+export default ReportProblem
 
 const styles = StyleSheet.create({
      

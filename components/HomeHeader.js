@@ -4,7 +4,7 @@ import React from 'react'
 const HomeHeader = () => {
     return(
         <View>
-
+            <Text>HomeHeader</Text>
         </View>
     )
 }

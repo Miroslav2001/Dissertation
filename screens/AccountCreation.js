@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,SafeAreaView } from 'react-native';
 import { COLORS, SIZES,} from "../constants";
-import {  ToHomeButton } from '../components';
+import {  ToHomeButton, CreateAccount} from '../components';
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -61,7 +63,7 @@ const AccountCreation = () => {
     console.log('Password:', password);
     console.log('Email:', email);
   };
-
+  
   return (
     <SafeAreaView style={{ flex: 1}}>
        
@@ -90,13 +92,14 @@ const AccountCreation = () => {
         value={email}
         onChangeText={setEmail}
       />
-      <ToHomeButton
-            minWidth={'100%'}
-            fontSize={SIZES.font}
+     <CreateAccount
+            username={username}
+            password={password}
+            email={email}
             marginTop={50}
-            
-          />
-       
+            minWidth={'100%'}
+     />
+      
     </View>
     </View>
     </SafeAreaView>
@@ -104,3 +107,4 @@ const AccountCreation = () => {
 };
 
 export default AccountCreation;
+

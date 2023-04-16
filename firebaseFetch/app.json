@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NewAttemptApp",
-    "slug": "NewAttemptApp",
+    "name": "firebaseFetch",
+    "slug": "firebaseFetch",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,8 +18,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "animal"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -29,11 +28,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "8df9bd15-6b69-45cc-a617-742ef07cee2c"
-      }
     }
   }
 }

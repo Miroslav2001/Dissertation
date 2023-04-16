@@ -2,6 +2,12 @@ import {TouchableOpacity, View, Text} from 'react-native'
 import React from 'react'
 import { COLORS, SIZES, FONTS, SHADOWS } from '../constants'
 import { useNavigation } from "@react-navigation/native";
+import {database} from '../firebaseConfig'
+import firebase from 'firebase/compat/app';
+import 'firebase/auth';
+import '../global.js'
+
+
 
 
 export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
@@ -59,7 +65,8 @@ export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
         </TouchableOpacity>
       );
     };
-    export const LogInButton = ({ minWidth, fontSize, handlePress, ...props }) => {
+
+  export const LogInButton = ({ minWidth, fontSize, handlePress,email, password, ...props }) => {
       const navigation = useNavigation();
         return (
           <TouchableOpacity
@@ -71,7 +78,25 @@ export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
               minWidth: minWidth,
               ...props,
             }}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => 
+              firebase.auth().signInWithEmailAndPassword(email, password)
+              .then(() => {
+                // User signed in successfully#
+                
+                navigation.navigate("Home")
+                const user = firebase.auth().currentUser;
+                global.displayName = user.displayName
+              })
+              .catch((error) => {
+                // Handle login errors
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode);
+                console.log(errorMessage);
+              })
+              
+            }
+              
           >
             <Text
               style={{
@@ -85,7 +110,7 @@ export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
             </Text>
           </TouchableOpacity>
         );
-      };
+    };
 export const CreateAccountButton = ({ minWidth, fontSize, handlePress, ...props }) => {
     const navigation = useNavigation();
       return (
@@ -126,7 +151,18 @@ export const CreateAccountButton = ({ minWidth, fontSize, handlePress, ...props 
               minWidth: minWidth,
               ...props,
             }}
-            onPress={() => navigation.navigate("Welcome")}
+            onPress={() => 
+              auth()
+            .signOut()
+            .then(() => {
+              navigation.navigate("Welcome")
+        // Navigate to the login screen or do something else
+      })
+      .catch(error => {
+        // Handle errors here
+        console.log(error);
+      })}
+              
           >
             <Text
               style={{
@@ -169,4 +205,71 @@ export const CreateAccountButton = ({ minWidth, fontSize, handlePress, ...props 
       </TouchableOpacity>
     );
   };
+    
+  export const CreateAccount = ({ minWidth, fontSize, handlePress,username,password,email, ...props }) => {
+    const navigation = useNavigation();
+    
+    
+      return (
+        <TouchableOpacity
+          style={{
+            
+            backgroundColor: COLORS.primary,
+            padding: SIZES.small,
+            borderRadius: SIZES.extraLarge,
+            minWidth: minWidth,
+            ...props,
+          }}
+          onPress={() =>
+            
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(async (userCredential) => {
+              // User signed up successfully
+              database.collection('Users').add({
+                UserID: userCredential.user.uid,
+                Username: username,
+                Password: password,
+                Email: email})
+                
+             
+              
+              
+              const user = firebase.auth().currentUser;
+                 await user.updateProfile({
+                displayName: username
+              }).then(() => {
+                console.log('love' +user.displayName)
+                // Profile updated successfully
+              }).catch((error) => {
+                // An error occurred
+                console.log(error);
+              });
+
+              console.log(user);
+              console.log(user.displayName);
+              global.displayName = user.displayName
+              navigation.navigate("Home")
+            })
+            .catch((error) => {
+              console.log("dasdasd")
+              // Handle signup errors
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.log(errorMessage);
+            
+          })}
+        >
+          <Text
+            style={{
+              fontFamily: FONTS.bold,
+              fontSize: fontSize,
+              color: COLORS.white,
+              textAlign: "center",
+            }}
+          >
+            Create Account
+          </Text>
+        </TouchableOpacity>
+      );
+    };
     

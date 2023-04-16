@@ -1,14 +1,18 @@
 
-import { SafeAreaView, View, StyleSheet, ActivityIndicator} from 'react-native';
+import { SafeAreaView, View, StyleSheet, ActivityIndicator, Text} from 'react-native';
 import {  RectButton, LogOutButton, OptionMenu, ReportButton } from '../components';
-import { COLORS, SIZES, NFTData } from "../constants";
+import { COLORS, SIZES, FONTS } from "../constants";
 import MapView, { Marker } from 'react-native-maps';
 import React, { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
+import 'firebase/auth';
+import '../global.js'
+
 
 const Home = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const userName = displayName;
   
   useEffect(() => {
     (async () => {
@@ -63,10 +67,16 @@ const Home = () => {
         
       </MapView>
       <View
+        style={styles.greetingTextPosition}
+          
+    >
+      <Text style={styles.greetingText}>Welcome, {global.displayName}</Text>
+      </View>
+      <View
         style={{
             position: 'absolute',//use absolute position to show button on top of the map
             top: '10%', //for center align
-            alignSelf: 'flex-end' //for align to right
+            alignSelf: 'flex-start' //for align to right
         }}
     >
       <OptionMenu></OptionMenu>
@@ -95,6 +105,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10,
   },
+  greetingTextPosition:{
+    position: 'absolute',//use absolute position to show button on top of the map
+            top: '9%', //for center align
+            alignSelf: 'flex-end', //for align to right
+            paddingRight:30,
+            
+  },
+  greetingText:{
+    fontFamily: 'Chunky',
+            color: COLORS.black,
+          fontSize: SIZES.medium
+
+  }
 });
 
 

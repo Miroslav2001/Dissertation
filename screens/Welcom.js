@@ -8,7 +8,7 @@ import { useFonts } from 'expo-font';
 const Welcome = () => {
     
   
-    const [userName, onChangeUsername] = React.useState('');
+    const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
 
     
@@ -24,9 +24,9 @@ const Welcome = () => {
         <View style={{ padding: 80 }} />
         <TextInput
         style={styles.input}
-        onChangeText={onChangeUsername}
-        value={userName}
-        placeholder="Enter Your Username"
+        onChangeText={onChangeEmail}
+        value={email}
+        placeholder="Enter Your Email"
         keyboardType="string"
       />
       <TextInput
@@ -40,6 +40,9 @@ const Welcome = () => {
       
       <View style={styles.bottom}>
           <LogInButton
+           
+           password={password}
+           email={email}
             minWidth={150}
             fontSize={SIZES.font}
           />

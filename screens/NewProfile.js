@@ -1,20 +1,41 @@
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity,Modal, TextInput, StyleSheet,SafeAreaView, Image } from 'react-native';
+import { View, Text, TouchableOpacity,Modal, TextInput, StyleSheet,SafeAreaView, Image, Button} from 'react-native';
 import { COLORS, SIZES,} from "../constants";
 import {  ToHomeButton, CreateAccount} from '../components';
 import { Picker } from '@react-native-picker/picker';
-import { ScrollInput } from '../components';
+
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import {database} from '../firebaseConfig'
 
 const NewProfile = () => {
   
-  let imageChaneURL = null
-  const [animalExtraInformation, setExtraInformation] = useState('');
-  
 
+  let imageChaneURL = null;
+  const [animalExtraInformation, setExtraInformation] = useState('');
+  const [modalVisible1, setModalVisible1] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
+  const [modalVisible4, setModalVisible4] = useState(false);
+
+  const [animalType, setAnimalType] = useState('click me!');
+  const [animalState, setAnimalState] = useState('click me!');
+  const [animalAge, setAnimalAge] = useState('click me!');
+  const [animalAggression, setAnimalAggression] = useState('click me!');
+
+  const handleAnimalTypeChange = (itemValue) => {
+    setAnimalType(itemValue);
+  };
+  const handleAnimalStateChange = (itemValue) => {
+    setAnimalState(itemValue);
+  };
+  const handleAnimalAgeChange = (itemValue) => {
+    setAnimalAge(itemValue);
+  };
+  const handleAnimalAggressionChange = (itemValue) => {
+    setAnimalAggression(itemValue);
+  };
   const [imageSource, setImageSource] = useState('https://assets3.thrillist.com/v1/image/3039952/1584x1700/scale;webp=auto;jpeg_quality=60.jpg');
   const changeImage = () => {
     
@@ -22,7 +43,7 @@ const NewProfile = () => {
   };
   
   const handleSubmit = () => {
-    // TODO: Handle the form submission
+    
     console.log('Username:', username);
     console.log('Password:', password);
     console.log('Email:', email);
@@ -49,8 +70,15 @@ const NewProfile = () => {
       // You can do something with the image here
     }
   };
-  
-  
+  const storeData = () => {
+    console.log(animalType)
+    database.collection('Animal Profiles').add({
+      Photo: imageSource,
+      Animal_Type: animalType,
+      Animal_State : animalState,
+      Animal_Age: animalAge,
+      Ainmal_Aggression: animalAggression})
+    };
   
   return (
    
@@ -82,29 +110,109 @@ const NewProfile = () => {
     
     </View>
       <Text style={styles.infoText}>What animal have you seen?</Text>
-      <ScrollInput 
+      <View>
+        <TouchableOpacity onPress={() => setModalVisible1(true)}>
+              <Text style={styles.text}>{animalType}</Text>
+          </TouchableOpacity>
+          <Modal visible={modalVisible1} animationType="slide" transparent={true}>
+                  <View style={styles.modal}>
+                      <Picker style={styles.picker}
+                          selectedValue={animalType} onValueChange={handleAnimalTypeChange}>
+                    
+                          <Picker.Item label={'cat'} value={'cat'} />
+                          <Picker.Item label={'dog'} value={'dog'} />
+                          <Picker.Item label={'turtle'} value={'turtle'} />
+                      </Picker>
+                      <TouchableOpacity onPress={() => setModalVisible1(false)}>
+                          <Text style={styles.modalText}>Close</Text>
+                      </TouchableOpacity>
+                  </View>
+              </Modal>
+              </View>
+      {/* <ScrollInput 
       option1={'cat'}
       option2={'dog'}
       option3={'turtle'}>
-      </ScrollInput>
+      
+      </ScrollInput> */}
       <Text style={styles.infoText}>In what state was the animal?</Text>
-      <ScrollInput 
+      <View>
+        <TouchableOpacity onPress={() => setModalVisible2(true)}>
+              <Text style={styles.text}>{animalState}</Text>
+          </TouchableOpacity>
+          <Modal visible={modalVisible2} animationType="slide" transparent={true}>
+                  <View style={styles.modal}>
+                      <Picker style={styles.picker}
+                          selectedValue={animalState} onValueChange={handleAnimalStateChange}
+                      >
+                          <Picker.Item label={'happy'} value={'happy'} />
+                          <Picker.Item label={'ok'} value={'ok'} />
+                          <Picker.Item label={'misserable'} value={'misserable'} />
+                      </Picker>
+                      <TouchableOpacity onPress={() => setModalVisible2(false)}>
+                          <Text style={styles.modalText}>Close</Text>
+                      </TouchableOpacity>
+                  </View>
+              </Modal>
+              </View>
+    
+      {/* <ScrollInput 
       option1={'happy'}
       option2={'ok'}
       option3={'misserable'}>
-      </ScrollInput>
+      </ScrollInput> */}
       <Text style={styles.infoText}>In what age group would you classify the animal?</Text>
-      <ScrollInput 
+      <View>
+        <TouchableOpacity onPress={() => setModalVisible3(true)}>
+              <Text style={styles.text}>{animalAge}</Text>
+          </TouchableOpacity>
+          <Modal visible={modalVisible3} animationType="slide" transparent={true}>
+                  <View style={styles.modal}>
+                      <Picker style={styles.picker}
+                          selectedValue={animalAge} onValueChange={handleAnimalAgeChange}
+                      >
+                          <Picker.Item label={'baby'} value={'baby'} />
+                          <Picker.Item label={'teen'} value={'teen'} />
+                          <Picker.Item label={'adult'} value={'adult'} />
+                      </Picker>
+                      <TouchableOpacity onPress={() => setModalVisible3(false)}>
+                          <Text style={styles.modalText}>Close</Text>
+                      </TouchableOpacity>
+                  </View>
+              </Modal>
+              </View>
+    
+      {/* <ScrollInput 
       option1={'baby'}
       option2={'teen'}
       option3={'adult'}>
-      </ScrollInput>
+      </ScrollInput> */}
       <Text style={styles.infoText}>How aggressive did the animal come across?</Text>
-      <ScrollInput 
+      <View>
+        <TouchableOpacity onPress={() => setModalVisible4(true)}>
+              <Text style={styles.text}>{animalAggression}</Text>
+          </TouchableOpacity>
+          <Modal visible={modalVisible4} animationType="slide" transparent={true}>
+                  <View style={styles.modal}>
+                      <Picker style={styles.picker}
+                          selectedValue={animalAggression} onValueChange={handleAnimalAggressionChange}
+                      >
+                          <Picker.Item label={'not aggressive'} value={'not aggressive'} />
+                          <Picker.Item label={'could not tell'} value={'could not tell'} />
+                          <Picker.Item label={'agreesive'} value={'agreesive'} />
+                      </Picker>
+                      <TouchableOpacity onPress={() => setModalVisible4(false)}>
+                          <Text style={styles.modalText}>Close</Text>
+                      </TouchableOpacity>
+                  </View>
+              </Modal>
+              </View>
+    
+      {/* <ScrollInput 
       option1={'not aggressive'}
       option2={'could not tell'}
       option3={'agreesive'}>
-      </ScrollInput>
+      </ScrollInput> */}
       <Text style={styles.infoText}>Is there any additional information you would like to provide about the animal?</Text>
        <TextInput
         style={styles.input}
@@ -113,7 +221,7 @@ const NewProfile = () => {
       />
       
     
-      
+      <Button title="Save Data" onPress={() => storeData()} />
     </View>
     </View>
     </SafeAreaView>
@@ -128,21 +236,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  modal: {
-    
-    backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 40,
-    marginTop: 'auto',
-    marginBottom: 'auto',
-  },
-  modalText: {
-    color: '#007AFF',
-    marginTop: 10,
   },
   input: {
     backgroundColor: '#fff',
@@ -181,13 +274,25 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 15,
           },
-  picker:{
-    height: 190,
-    width: 400,
+
+  modal: {
+    
+    backgroundColor: '#FFFFFF',
+    padding: 15,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 45,
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
-  picker1:{
-    height: 100,
-    width: 200,
+  modalText: {
+    color: '#007AFF',
+    marginTop: 10,
+  },
+  picker:{
+    height: 200,
+    width: 400,
   }
 });
 

@@ -1,29 +1,35 @@
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity,Modal, TextInput, StyleSheet,SafeAreaView, Image, Button} from 'react-native';
-import { COLORS, SIZES,} from "../constants";
-import {  ToHomeButton, CreateAccount} from '../components';
+import { View, Text, TouchableOpacity,Modal, TextInput, StyleSheet,SafeAreaView, Image, ScrollView} from 'react-native';
+import {  ToHomeButton, CreateAccount,PinpointLocation} from '../components';
 import { Picker } from '@react-native-picker/picker';
-
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {database} from '../firebaseConfig'
+import { COLORS, SIZES, FONTS, SHADOWS } from '../constants'
+
 
 const NewProfile = () => {
   
-
+  const [location, setLocation] = useState(null);
+  const handleLocationChange = (newLocation) => {
+    setLocation(newLocation);
+  };
   let imageChaneURL = null;
   const [animalExtraInformation, setExtraInformation] = useState('');
   const [modalVisible1, setModalVisible1] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
+  const [modalVisible5, setModalVisible5] = useState(false);
 
   const [animalType, setAnimalType] = useState('click me!');
   const [animalState, setAnimalState] = useState('click me!');
   const [animalAge, setAnimalAge] = useState('click me!');
   const [animalAggression, setAnimalAggression] = useState('click me!');
-
+  const [animalName, setAnimalName] = useState();
+  const navigation = useNavigation();
   const handleAnimalTypeChange = (itemValue) => {
     setAnimalType(itemValue);
   };
@@ -36,18 +42,13 @@ const NewProfile = () => {
   const handleAnimalAggressionChange = (itemValue) => {
     setAnimalAggression(itemValue);
   };
+
   const [imageSource, setImageSource] = useState('https://assets3.thrillist.com/v1/image/3039952/1584x1700/scale;webp=auto;jpeg_quality=60.jpg');
   const changeImage = () => {
     
     setImageSource(imageChaneURL);
   };
   
-  const handleSubmit = () => {
-    
-    console.log('Username:', username);
-    console.log('Password:', password);
-    console.log('Email:', email);
-  };
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -70,21 +71,29 @@ const NewProfile = () => {
       // You can do something with the image here
     }
   };
+
+  
   const storeData = () => {
-    console.log(animalType)
     database.collection('Animal Profiles').add({
       Photo: imageSource,
       Animal_Type: animalType,
       Animal_State : animalState,
       Animal_Age: animalAge,
-      Ainmal_Aggression: animalAggression})
+      Animal_Aggression: animalAggression,
+      Location_Latitude: location.latitude,
+      Location_Longtitude: location.longitude,
+      Animal_Name: animalName,
+      Animal_Extra_Information: animalExtraInformation
+    })
+      navigation.navigate("Home")
     };
   
   return (
-   
+    
     <SafeAreaView style={{ flex: 1}}>
+    <ScrollView>
        
-    <View style={{ flex: 1, backgroundColor:COLORS.light_purple}} >
+    <View style={{ flex: 1, backgroundColor:'#98e9f5'}} >
     
     <View style={styles.header_container}>
 
@@ -207,12 +216,25 @@ const NewProfile = () => {
                   </View>
               </Modal>
               </View>
-    
+      
+
+      <Text style={styles.infoText}>How far from your location did you last spot this animal?</Text>
+      
+      <View style={{ flexDirection: 'row',flex: 1, alignContent:'center',height: 300, paddingTop: 10}}>
+      <PinpointLocation onLocationChange={handleLocationChange}></PinpointLocation>
+      </View>
+     
       {/* <ScrollInput 
       option1={'not aggressive'}
       option2={'could not tell'}
       option3={'agreesive'}>
       </ScrollInput> */}
+      <Text style={styles.infoText}>Would you like to give a name to the animal you have seen today?</Text>
+       <TextInput
+        style={styles.input}
+        value={animalName}
+        onChangeText={setAnimalName}
+      />
       <Text style={styles.infoText}>Is there any additional information you would like to provide about the animal?</Text>
        <TextInput
         style={styles.input}
@@ -220,11 +242,30 @@ const NewProfile = () => {
         onChangeText={setExtraInformation}
       />
       
-    
-      <Button title="Save Data" onPress={() => storeData()} />
+      <View style={{ padding: 20 }} />
+      <TouchableOpacity style={{
+          backgroundColor: COLORS.primary,
+          padding: SIZES.small,
+          borderRadius: SIZES.extraLarge,
+          minWidth: 150
+        }}title="Save Data" onPress={() => storeData()} >
+          <Text
+              style={{
+                fontFamily: FONTS.bold,
+                fontSize: SIZES.font,
+                color: COLORS.white,
+                textAlign: "center",
+              }}
+            >
+            Create Account
+            </Text>
+        </TouchableOpacity>
+        
     </View>
     </View>
+    </ScrollView>
     </SafeAreaView>
+    
   );
 };
 const styles = StyleSheet.create({
@@ -237,6 +278,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+
   input: {
     backgroundColor: '#fff',
     height: 100,

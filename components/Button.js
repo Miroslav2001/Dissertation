@@ -1,13 +1,37 @@
-import {TouchableOpacity, View, Text} from 'react-native'
+import {TouchableOpacity, View, Text,Image} from 'react-native'
 import React from 'react'
 import { COLORS, SIZES, FONTS, SHADOWS } from '../constants'
 import { useNavigation } from "@react-navigation/native";
 import {database} from '../firebaseConfig'
 import firebase from 'firebase/compat/app';
 import 'firebase/auth';
-import '../global.js'
+import '../constants/global.js'
 
-
+export const CircleButton = ({ imgUrl, handlePress, ...props }) => {
+  return (
+    <TouchableOpacity
+      style={{
+        width: 40,
+        height: 40,
+        backgroundColor: COLORS.white,
+        position: "absolute",
+        left:10,
+        borderRadius: SIZES.extraLarge,
+        alignItems: "center",
+        justifyContent: "center",
+        ...SHADOWS.light,
+        ...props,
+      }}
+      onPress={handlePress}
+    >
+      <Image
+        source={imgUrl}
+        resizeMode="contain"
+        style={{ width: 24, height: 24 }}
+      />
+    </TouchableOpacity>
+  );
+};
 
 
 export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
@@ -111,6 +135,16 @@ export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
           </TouchableOpacity>
         );
     };
+
+export const ImageButton = ({ onPress, source }) => {
+      return (
+        <TouchableOpacity onPress={onPress} activeOpacity={1}>
+          <Image source={source}  resizeMode="cover" style={styles.image}></Image>
+        </TouchableOpacity>
+      );
+    };
+    
+   
 export const CreateAccountButton = ({ minWidth, fontSize, handlePress, ...props }) => {
     const navigation = useNavigation();
       return (
@@ -205,7 +239,35 @@ export const CreateAccountButton = ({ minWidth, fontSize, handlePress, ...props 
       </TouchableOpacity>
     );
   };
-    
+  // export const CreateAnimalProfile = ({ minWidth, fontSize, handlePress, imageURL, Animal_Type, ...props }) => {
+  //   const navigation = useNavigation();
+  //     return (
+  //       <TouchableOpacity
+  //         style={{
+            
+  //           backgroundColor: COLORS.primary,
+  //           padding: SIZES.small,
+  //           borderRadius: SIZES.extraLarge,
+  //           minWidth: minWidth,
+  //           ...props,
+  //         }}
+  //         onPress={() => navigation.navigate("Details")}
+  //       >
+  //         <Text
+  //           style={{
+  //             fontFamily: FONTS.bold,
+  //             fontSize: fontSize,
+  //             color: COLORS.white,
+  //             textAlign: "center",
+  //           }}
+  //         >
+  //           report
+  //         </Text>
+  //       </TouchableOpacity>
+  //     );
+  //   };
+  
+  
   export const CreateAccount = ({ minWidth, fontSize, handlePress,username,password,email, ...props }) => {
     const navigation = useNavigation();
     

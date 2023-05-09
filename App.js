@@ -10,7 +10,8 @@ import ReportProblem from "./screens/ReportProblem";
 import NewProfile from "./screens/NewProfile";
 import firebase from 'firebase/compat/app';
 import 'firebase/database';
-
+import AnimalProfiles from "./screens/AnimalProfiles";
+import AnimalDiary from "./screens/AnimalDiary"
 const theme = {
   ...DefaultTheme,
   colors:{
@@ -37,13 +38,15 @@ export default function App() {
   return (
     <NavigationContainer theme = {theme}> 
       <Stack.Navigator screenOptions={{ headerShown: false}}
-      initialRouteName="NewProfile">
+      initialRouteName="Home">
         <Stack.Screen name="Home" component={Home}/>
         <Stack.Screen name="Details" component={Details}/>
         <Stack.Screen name="Welcome" component={Welcome}/>
         <Stack.Screen name="AccountCreation" component={AccountCreation}/>
         <Stack.Screen name="ReportProblem" component={ReportProblem}/>
         <Stack.Screen name="NewProfile" component={NewProfile}/>
+        <Stack.Screen name="AnimalProfiles" component={AnimalProfiles}/>
+        <Stack.Screen name="AnimalDiary" component={AnimalDiary}/>
       </Stack.Navigator>
     
     </NavigationContainer>

@@ -1,5 +1,5 @@
 import {TouchableOpacity, View, Text,Image} from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { COLORS, SIZES, FONTS, SHADOWS } from '../constants'
 import { useNavigation } from "@react-navigation/native";
 import {database} from '../firebaseConfig'
@@ -7,60 +7,36 @@ import firebase from 'firebase/compat/app';
 import 'firebase/auth';
 import '../constants/global.js'
 
-export const CircleButton = ({ imgUrl, handlePress, ...props }) => {
+
+
+export const CircleButton = ({ imgUrl, handlePress, style, ...props }) => {
+  const buttonStyle = {
+    width: 40,
+    height: 40,
+    backgroundColor: COLORS.white,
+    borderRadius: SIZES.extraLarge,
+    alignItems: "center",
+    justifyContent: "center",
+    ...SHADOWS.light,
+    ...style,
+  };
+
   return (
     <TouchableOpacity
-      style={{
-        width: 40,
-        height: 40,
-        backgroundColor: COLORS.white,
-        position: "absolute",
-        left:10,
-        borderRadius: SIZES.extraLarge,
-        alignItems: "center",
-        justifyContent: "center",
-        ...SHADOWS.light,
-        ...props,
-      }}
+      style={buttonStyle}
       onPress={handlePress}
+      {...props}
     >
       <Image
         source={imgUrl}
         resizeMode="contain"
-        style={{ width: 24, height: 24 }}
+        style={{ width: 36, height: 36 }}
       />
     </TouchableOpacity>
   );
 };
 
 
-export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
-  const navigation = useNavigation();
-    return (
-      <TouchableOpacity
-        style={{
-          
-          backgroundColor: COLORS.primary,
-          padding: SIZES.small,
-          borderRadius: SIZES.extraLarge,
-          minWidth: minWidth,
-          ...props,
-        }}
-        onPress={() => navigation.navigate("Details")}
-      >
-        <Text
-          style={{
-            fontFamily: FONTS.bold,
-            fontSize: fontSize,
-            color: COLORS.white,
-            textAlign: "center",
-          }}
-        >
-          Details Page
-        </Text>
-      </TouchableOpacity>
-    );
-  };
 
   export const ToHomeButton = ({ minWidth, fontSize, handlePress,marginTop, ...props }) => {
     const navigation = useNavigation();
@@ -212,62 +188,8 @@ export const CreateAccountButton = ({ minWidth, fontSize, handlePress, ...props 
         );
       };
 
-  export const ReportButton = ({ minWidth, fontSize, handlePress, ...props }) => {
-  const navigation = useNavigation();
-    return (
-      <TouchableOpacity
-        style={{
-          
-          backgroundColor: COLORS.primary,
-          padding: SIZES.small,
-          borderRadius: SIZES.extraLarge,
-          minWidth: minWidth,
-          ...props,
-        }}
-        onPress={() => navigation.navigate("Details")}
-      >
-        <Text
-          style={{
-            fontFamily: FONTS.bold,
-            fontSize: fontSize,
-            color: COLORS.white,
-            textAlign: "center",
-          }}
-        >
-          report
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-  // export const CreateAnimalProfile = ({ minWidth, fontSize, handlePress, imageURL, Animal_Type, ...props }) => {
-  //   const navigation = useNavigation();
-  //     return (
-  //       <TouchableOpacity
-  //         style={{
-            
-  //           backgroundColor: COLORS.primary,
-  //           padding: SIZES.small,
-  //           borderRadius: SIZES.extraLarge,
-  //           minWidth: minWidth,
-  //           ...props,
-  //         }}
-  //         onPress={() => navigation.navigate("Details")}
-  //       >
-  //         <Text
-  //           style={{
-  //             fontFamily: FONTS.bold,
-  //             fontSize: fontSize,
-  //             color: COLORS.white,
-  //             textAlign: "center",
-  //           }}
-  //         >
-  //           report
-  //         </Text>
-  //       </TouchableOpacity>
-  //     );
-  //   };
-  
-  
+
+
   export const CreateAccount = ({ minWidth, fontSize, handlePress,username,password,email, ...props }) => {
     const navigation = useNavigation();
     
@@ -334,4 +256,57 @@ export const CreateAccountButton = ({ minWidth, fontSize, handlePress, ...props 
         </TouchableOpacity>
       );
     };
-    
+  export const RoleButton = ({ onPress, title, style }) => {
+    return (
+      <TouchableOpacity onPress={onPress} style={style}>
+        <Text style={{
+          fontSize: 16,
+          color: 'white',
+        }}
+        >{title}</Text>
+      </TouchableOpacity>
+    );
+   
+  };
+  export const ProblemButton = ({ imgUrl, handlePress, style, ...props }) => {
+    const [modalVisibleUser, setModalVisibleUser] = useState(false);
+    const [modalVisibleAdmin, setModalVisibleAdmin] = useState(false);
+
+  
+    const buttonStyle = {
+      width: 40,
+      height: 40,
+      backgroundColor: COLORS.white,
+      borderRadius: SIZES.extraLarge,
+      alignItems: "center",
+      justifyContent: "center",
+      ...SHADOWS.light,
+      ...style,
+    };
+  
+    return (
+      <TouchableOpacity
+        style={buttonStyle}
+        onPress={handlePress}
+        {...props}
+      >
+        <Image
+          source={imgUrl}
+          resizeMode="contain"
+          style={{ width: 36, height: 36 }}
+        />
+        <Text style={{
+          fontFamily: 'Chunky',
+          color: COLORS.white,
+          fontSize: 9,
+        }}>Report</Text>
+      </TouchableOpacity>
+    //   <ProblemModal
+    //   visible={modalVisible}
+    //   onClose={handleCloseModal}
+    //   sendEmail={handleSendEmail}
+    // />
+ 
+    );
+  };
+  

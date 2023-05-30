@@ -2,7 +2,7 @@
 import {View, Text, StyleSheet} from 'react-native'
 import React  from 'react'
 import { COLORS, SIZES } from '../constants'
-import calculateDistance from '../calculations/Distance'
+import DistanceComponent from './DistanceComponents'
 
 export const AnimalName = ({name}) => {
     return(
@@ -31,6 +31,10 @@ export const DateOfEntry = () => {
 }
 
 export const AnimalInformaiton =({data}) => {
+    const destination = {
+        latitude: data.Location_Latitude,
+        longitude: data.Location_Longtitude,
+      }
     return(
         <View>
             <View style={styles.header_container}>
@@ -42,8 +46,9 @@ export const AnimalInformaiton =({data}) => {
                                 fontSize: 15,
                                 textAlign:'center'}}>Importnat Information Provided by other users:</Text>
                 <Text style={styles.data_header}>Last Spotted:</Text>
-                <Text style={styles.info_header}>{parseInt(calculateDistance(global.location_lat,global.location_long,data.Location_Latitude,data.Location_Longtitude))}</Text>
-                <Text style={styles.data_header}>Meters from you!</Text>
+                <DistanceComponent destination = {destination}/>
+                
+                <Text style={styles.data_header}> from your location!</Text>
                 <View style={{ flexDirection: 'row'}}>
                     <Text style={styles.purple_header}>Age:</Text>
                     <Text style={styles.black_answer}>{data.Animal_Age}</Text>

@@ -1,14 +1,16 @@
 
 import { SafeAreaView, View,StyleSheet,Text, ActivityIndicator } from 'react-native';
-import { COLORS, SIZES,} from "../constants";
+import { COLORS, SIZES, assets} from "../constants";
 import { FlatList } from 'react-native-gesture-handler';
-import {AnimalCard, ScrollBar} from '../components';
+import {AnimalCard, ScrollBar,CircleButton} from '../components';
 import {database} from '../firebaseConfig'
 import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs,onSnapshot} from 'firebase/firestore';
 import Slider from '@react-native-community/slider';
+import { useNavigation } from "@react-navigation/native";
 
 const Details = () => {
+  const navigation = useNavigation();
   const [animals, setAnimal] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const animalDatabase = collection(getFirestore(), 'Animal Profiles');
@@ -94,9 +96,20 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      
       <View style={{ flex: 1, backgroundColor:COLORS.light_purple}} >
+      
       <Text style={styles.header}>Animals Near You</Text>
       <Text style={styles.distance_bar}>Distance Of Search:</Text>
+      <CircleButton
+            imgUrl={assets.left}
+            style={{
+              position: "absolute",
+              left:10,
+              top:20,
+            }}
+            handlePress={() => navigation.goBack()}
+            />
       
         <ScrollBar onValueChange={handleSliderValueChange}/>
       
@@ -116,7 +129,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
         left:0,
         zIndex:-1,
       }}>
-        
+      
       </View>
       </View>
     </SafeAreaView>

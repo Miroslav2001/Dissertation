@@ -10,7 +10,6 @@ const OptionMenu = () => {
 
   const options = [
     { id: 'Welcome', name: 'Log Out' },
-    { id: 'Details', name: 'Detail Page' },
     { id: 'Home', name: 'Back' },
   ];
 
@@ -84,76 +83,4 @@ const styles = StyleSheet.create({
 
 export default OptionMenu;
 
-
-/*
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList,StyleSheet } from 'react-native';
-
-import Icon from 'react-native-vector-icons/FontAwesome';
-
-const MenuButton = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const myIcon = <Icon name="rocket" size={30} color="#900" />;
-  const options = [
-    { id: '1', name: 'Option 1' },
-    { id: '2', name: 'Option 2' },
-    { id: '3', name: 'Option 3' },
-    { id: '4', name: 'Option 4' },
-  ];
-
-  const handleSelect = (item) => {
-    console.log(`Selected item: ${item.name}`);
-    setModalVisible(false);
-  };
-
-  return (
-    <View>
-      <Icon.Button 
-      style={styles.menuBar}
-      name="bars"
-      backgroundColor="#3b5998"
-      borderRadius={10}
-      size={25}
-      width={100}
-      onPress={() => setModalVisible(true)}>
-        
-      </Icon.Button>
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-      >
-        <View style={{ marginTop: 22 }}>
-          <FlatList
-            data={options}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleSelect(item)}>
-                <Text>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      </Modal>
-    </View>
-  )
-}
-
-export default MenuButton
-
-const styles = StyleSheet.create({
-     
-    menuBar: {
-      
-    
-      alignItems: 'center',
-      justifyContent: 'center',
-      
-    }
-});
-
-*/ 
 

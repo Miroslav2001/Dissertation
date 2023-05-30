@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity,Modal, TextInput, StyleSheet,SafeAreaView, Image, ScrollView} from 'react-native';
-import {  ToHomeButton, CreateAccount,PinpointLocation} from '../components';
+import { View, Text, TouchableOpacity,Modal, TextInput, StyleSheet,SafeAreaView, Image, ScrollView,KeyboardAvoidingView} from 'react-native';
+import {  ToHomeButton, CreateAccount,PinpointLocation,CircleButton} from '../components';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {database} from '../firebaseConfig'
-import { COLORS, SIZES, FONTS, SHADOWS } from '../constants'
+import { COLORS, SIZES, FONTS, SHADOWS,assets } from '../constants'
 
 
 const NewProfile = () => {
@@ -73,8 +73,9 @@ const NewProfile = () => {
   };
 
   
-  const storeData = () => {
-    database.collection('Animal Profiles').add({
+  const storeData = async () => {
+    const animalRef = await database.collection('Animal Profiles').add({
+    // database.collection('Animal Profiles').add({
       Photo: imageSource,
       Animal_Type: animalType,
       Animal_State : animalState,
@@ -85,6 +86,15 @@ const NewProfile = () => {
       Animal_Name: animalName,
       Animal_Extra_Information: animalExtraInformation
     })
+    const animalId = animalRef.id;
+    if(animalExtraInformation != null){
+      await database.collection('Diary').add({
+        content: animalExtraInformation,
+        author: global.displayName,
+        date: new Date(),
+        profileId: animalId,
+      });
+    }
       navigation.navigate("Home")
     };
   
@@ -96,7 +106,15 @@ const NewProfile = () => {
     <View style={{ flex: 1, backgroundColor:'#98e9f5'}} >
     
     <View style={styles.header_container}>
-
+    <CircleButton
+            imgUrl={assets.left}
+            style={{
+              position: "absolute",
+              left:5,
+              top:10,
+            }}
+            handlePress={() => navigation.goBack()}
+            />
     <Text style={styles.header}>New Animal Profile</Text>
     <View/>
     <Text style={styles.sub_header}>Help us help the animal by adding as much detail as possible</Text>
@@ -208,7 +226,7 @@ const NewProfile = () => {
                       >
                           <Picker.Item label={'not aggressive'} value={'not aggressive'} />
                           <Picker.Item label={'could not tell'} value={'could not tell'} />
-                          <Picker.Item label={'agreesive'} value={'agreesive'} />
+                          <Picker.Item label={'aggressive'} value={'aggressive'} />
                       </Picker>
                       <TouchableOpacity onPress={() => setModalVisible4(false)}>
                           <Text style={styles.modalText}>Close</Text>
@@ -247,7 +265,8 @@ const NewProfile = () => {
           backgroundColor: COLORS.primary,
           padding: SIZES.small,
           borderRadius: SIZES.extraLarge,
-          minWidth: 150
+          minWidth: 150,
+          marginBottom:180
         }}title="Save Data" onPress={() => storeData()} >
           <Text
               style={{
@@ -306,6 +325,7 @@ const styles = StyleSheet.create({
     marginTop:20,
   },
   header:{
+    marginTop:30,
     fontFamily: 'Chunky',
     color: COLORS.white,
     fontSize: 38,          

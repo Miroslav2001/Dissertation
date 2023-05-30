@@ -30,6 +30,7 @@ const Welcome = () => {
         keyboardType="string"
       />
       <TextInput
+        secureTextEntry={true}
         style={styles.input}
         onChangeText={onChangePassword}
         value={password}

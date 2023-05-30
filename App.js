@@ -3,12 +3,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import Home from './screens/Home';
-import Details from './screens/Details';
 import Welcome from "./screens/Welcom";
 import AccountCreation from "./screens/AccountCreation";
 import ReportProblem from "./screens/ReportProblem";
 import NewProfile from "./screens/NewProfile";
-import firebase from 'firebase/compat/app';
 import 'firebase/database';
 import AnimalProfiles from "./screens/AnimalProfiles";
 import AnimalDiary from "./screens/AnimalDiary"
@@ -38,9 +36,8 @@ export default function App() {
   return (
     <NavigationContainer theme = {theme}> 
       <Stack.Navigator screenOptions={{ headerShown: false}}
-      initialRouteName="Home">
+      initialRouteName="Welcome">
         <Stack.Screen name="Home" component={Home}/>
-        <Stack.Screen name="Details" component={Details}/>
         <Stack.Screen name="Welcome" component={Welcome}/>
         <Stack.Screen name="AccountCreation" component={AccountCreation}/>
         <Stack.Screen name="ReportProblem" component={ReportProblem}/>

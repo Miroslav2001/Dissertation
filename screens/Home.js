@@ -47,7 +47,8 @@ const Home = () => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-
+      console.log(location.coords.latitude)
+      console.log(location.coords.longitude)
       location = await Location.watchPositionAsync({
         accuracy: Location.Accuracy.High,
         timeInterval: 1000, // update every 1 second
@@ -75,8 +76,6 @@ const Home = () => {
       </View>
     );
   } else{
-  console.log(global.location_long)
-  console.log(global.location_lat)
   global.location_long = location.coords.longitude;
   global.location_lat = location.coords.latitude;
   return (

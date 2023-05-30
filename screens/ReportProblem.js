@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,SafeAreaView } from 'react-native';
-import { COLORS, SIZES,} from "../constants";
-import {  ToHomeButton, CreateAccount} from '../components';
-
+import { COLORS, SIZES,assets} from "../constants";
+import {  ToHomeButton, CreateAccount, CircleButton} from '../components';
+import { useNavigation } from "@react-navigation/native";
 
 
 
 const ReportProblem = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [problem, setProblem] = useState('');
+  const navigation = useNavigation();
 
-  const handleSubmit = () => {
-    // TODO: Handle the form submission
-    console.log('Username:', username);
-    console.log('Password:', password);
-    console.log('Email:', email);
-  };
-  
+
   return (
     <SafeAreaView style={{ flex: 1}}>
        
@@ -31,30 +24,21 @@ const ReportProblem = () => {
       
       <TextInput
         style={styles.input}
-        value={username}
-        onChangeText={setUsername}
+        value={problem}
+        onChangeText={setProblem}
       />
-      <Text style={styles.infoText}>Password:</Text>
-      <TextInput
-        style={styles.input}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <Text style={styles.infoText}>Email:</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-      />
-     <CreateAccount
-            username={username}
-            password={password}
-            email={email}
-            marginTop={50}
-            minWidth={'100%'}
-     />
-      
+
+      <CircleButton
+            imgUrl={assets.left}
+            style={{
+              position: "absolute",
+              left:5,
+              top:10,
+            }}
+            handlePress={() => navigation.goBack()}
+            />
+      <ToHomeButton
+      ></ToHomeButton>
     </View>
     </View>
     </SafeAreaView>
@@ -93,6 +77,7 @@ const styles = StyleSheet.create({
     marginTop:20,
   },
   header:{
+    paddingTop:35,
     fontFamily: 'Chunky',
     color: COLORS.white,
     fontSize: 38,          

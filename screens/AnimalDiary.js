@@ -1,10 +1,12 @@
-import {Text, View, SafeAreaView, Image, FlatList,StatusBar, StyleSheet, TouchableOpacity } from 'react-native'
+import {Text, View, SafeAreaView, Image, FlatList,StatusBar, StyleSheet, TouchableOpacity, Modal, TextInput, Linking } from 'react-native'
 import {COLORS, SIZES, SHADOWS, FONTS,assets} from '../constants'
-import{AnimalProfile, AnimalsDesc, CircleButton,BlogPosts} from '../components'
+import{AnimalProfile, AnimalsDesc, CircleButton,BlogPosts, ProblemButton, ProblemModal} from '../components'
 import Details from './AnimalProfiles'
 import React, {useState} from 'react'
 import {AnimalName, AnimalInformaiton} from '../components/SubInfo'
-import {DistanceComponent} from '../components'
+import Mailer from 'react-native-mail';
+
+
 
 
 
@@ -32,14 +34,75 @@ const OptionButton = ({ label, onPress }) => (
   
   const ProfilePage = ({route,navigation}) => { 
     const { data } = route.params;
-    console.log(data.id)
-    const userLocationLongtitude = global.location_long
-    const userLocationLatitude = global.location_lat
-    const animalLocationLongtitude = data.Location_Longtitude
-    const animalLocationLlatitude = data.Location_Latitude
+  const [modalVisibleUser, setModalVisibleUser] = useState(false);
+  const [modalVisibleAdmin, setModalVisibleAdmin] = useState(false);
+  const [reportInformation, reportInformationSet] = useState('');
+
+  const sendEmail = async () => {
+    setModalVisibleUser(false)
+    const recipientEmail = 'strayadoption2@gmail.com'; // Replace with the actual recipient email
+    const subject = data.id; // Replace with the desired subject
+    const body = 'Problem Report  ' +JSON.stringify(reportInformation); // Replace with the desired body content
+    const emailUrl = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    try {
+      await Linking.openURL(emailUrl);
+    } catch (error) {
+      console.log('Error opening email client:', error);
+    }
+  }
+  const deleteProblem=() => {
+    setModalVisibleAdmin(false)
+
+  }
+  const handleAdminButtonPress =  () => {
+    console.log("Admin")
+    setModalVisibleAdmin(true)
+    // Functionality for admin button press
+  };
+
+  const handleUserButtonPress = () => {
+    // Functionality for normal user button press
+    console.log('user')
+    setModalVisibleUser(true)
+  };
+
+  const renderButton = () => {
+    if (global.userRole === 'admin') {
+      return (
+        <ProblemButton
+            imgUrl={assets.problem}
+            style={{
+              position: "absolute",
+              left:360,
+              width: 50,
+              height:50,
+              backgroundColor: 'black'
+            
+            }}
+            handlePress={handleAdminButtonPress}
+            />
+      );
+    } else {
+      return (
+        <ProblemButton
+            imgUrl={assets.problem}
+            style={{
+              position: "absolute",
+              left:360,
+              width: 50,
+              height:50,
+              backgroundColor: 'black'
+            
+            }}
+            handlePress={handleUserButtonPress}
+            />
+      );
+    }
+  };
     
-    
-    
+  
+
     return(
     <View style={styles.container}>
       <FlatList
@@ -62,9 +125,43 @@ const OptionButton = ({ label, onPress }) => (
             />
             <CircleButton
             imgUrl={assets.left}
+            style={{
+              position: "absolute",
+              left:10,
+            }}
             handlePress={() => navigation.goBack()}
             />
-            <DistanceComponent userLocationLat = {userLocationLatitude} userLocationLong = {userLocationLongtitude} destinationLat = {animalLocationLlatitude} destinationLong = {animalLocationLongtitude}/>
+           {renderButton()}
+           <Modal visible={modalVisibleUser} animationType="slide" transparent={true}>
+                  <View style={styles.modal}>
+                  <Text style={styles.header}>Report A Problem</Text>
+                    <Text style={styles.infoText}>Please Describe The Problem In Full Detail:</Text>
+                    <TextInput
+                      style={styles.input}
+                      value={reportInformation}
+                      onChangeText={reportInformationSet}
+                    />
+                    <Text style={styles.infoText}>You will be redirected to your personal mailbox after submition</Text>
+                  
+                      <TouchableOpacity onPress={() => sendEmail()}>
+                          <Text style={styles.modalText}> Send Report</Text>
+                      </TouchableOpacity>
+                  </View>
+              </Modal>
+
+              <Modal visible={modalVisibleAdmin} animationType="slide" transparent={true}>
+                  <View style={styles.modal}>
+                    <Text style={styles.infoText}>Is there any additional information you would like to provide about the animal?</Text>
+                    <TextInput
+                      style={styles.input}
+                      value={reportInformation}
+                      onChangeText={reportInformationSet}
+                    />
+                      <TouchableOpacity onPress={() => setModalVisibleUser(false)}>
+                          <Text style={styles.modalText}>Delete</Text>
+                      </TouchableOpacity>
+                  </View>
+              </Modal>
     </View>
   )};
   
@@ -74,6 +171,10 @@ const OptionButton = ({ label, onPress }) => (
     <View style={styles.container}>
       <CircleButton
             imgUrl={assets.left}
+            style={{
+              position: "absolute",
+              left:10,
+            }}
             handlePress={() => navigation.goBack()}
             />
       <Text style={styles.NameDiary}>{data.Animal_Name}'s Diary</Text>
@@ -134,10 +235,43 @@ const styles = StyleSheet.create({
     NameDiary:{
         fontFamily: 'Chunky',
         fontSize:40,
-        color: '#000000',
+        color: '#000000', 
+    },
+    input: {
+      backgroundColor: '#fff',
+      height: 100,
+      width: '100%',
+      borderColor: 'black',
+      borderWidth: 1,
+      marginTop: 10,
+      padding: 5,
+    },
+    modal: {
+    
+      backgroundColor: '#FFFFFF',
+      padding: 15,
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginHorizontal: 45,
+      marginTop: 'auto',
+      marginBottom: 'auto',
+    },
+    infoText:{
+      marginTop:20,
+      fontFamily: 'Chunky',
+      textAlign:'center'
+    },
+   
+    header:{
+      paddingTop:5,
+      fontFamily: 'Chunky',
+      fontSize: 25,
+            },
 
-
-        
+    modalText: {
+      color: '#007AFF',
+      marginTop: 10,
     },
  
   });
